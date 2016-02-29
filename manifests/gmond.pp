@@ -37,12 +37,6 @@ class ganglia::gmond (
     fail('$gmond_package_name is not a string or array.')
   }
 
-  if ($::ganglia::params::gmond_status_command) {
-    $hasstatus = false
-  } else {
-    $hasstatus = true
-  }
-
   if versioncmp($::puppetversion, '3.6.0') > 0 {
     package { $gmond_package_name:
       ensure        => present,
@@ -64,9 +58,7 @@ class ganglia::gmond (
   } ~>
   service { $::ganglia::params::gmond_service_name:
     ensure     => running,
-    hasstatus  => $hasstatus,
     hasrestart => true,
     enable     => true,
-    status     => $::ganglia::params::gmond_status_command,
   }
 }

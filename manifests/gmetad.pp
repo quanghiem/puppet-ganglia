@@ -26,12 +26,6 @@ class ganglia::gmetad(
   validate_string($gmetad_user)
   validate_integer($gmetad_case_sensitive_hostnames, 1, 0)
 
-  if ($::ganglia::params::gmetad_status_command) {
-    $hasstatus = false
-  } else {
-    $hasstatus = true
-  }
-
   if versioncmp($::puppetversion, '3.6.0') > 0 {
     package { $::ganglia::params::gmetad_package_name:
       ensure        => present,
@@ -53,9 +47,7 @@ class ganglia::gmetad(
   } ~>
   service { $::ganglia::params::gmetad_service_name:
     ensure     => running,
-    hasstatus  => $hasstatus,
     hasrestart => true,
     enable     => true,
-    status     => $::ganglia::params::gmetad_status_command,
   }
 }
